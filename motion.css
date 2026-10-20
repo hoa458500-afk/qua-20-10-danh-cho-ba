@@ -54,6 +54,13 @@ html.tiny-mobile #uiverse-starfield #stars2,
 html.tiny-mobile #uiverse-starfield #stars3,
 html.tiny-mobile #kado-flower-frame { display:none !important; }
 html.tiny-mobile #smile-stage .tiny-vinyl-scene { display:block !important; }
+/* On iPhone, avoid allocating a separate blurred texture for every SVG/layer. */
+html.tiny-safe *,html.tiny-safe *::before,html.tiny-safe *::after {
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  will-change:auto !important;
+}
 @media (prefers-reduced-motion: reduce) {
   html.gift-smooth #beauty-stage,
   html.gift-smooth #smile-stage,

@@ -35,5 +35,6 @@
   const timeline = Object.freeze({duration: DURATION, openingDuration: OPENING_DURATION, musicChangeAt: 9.7, fuelAt: 54.1 + LATE_SHIFT, fuelDuration: 1.8, scenes: SCENES, verses: VERSES,
     sceneAt: seconds => itemAt(SCENES, seconds), verseAt: seconds => itemAt(VERSES, seconds)});
   if (typeof module === 'object' && module.exports) module.exports = timeline;
-  globalThis.GiftTimeline = timeline;
+  if (typeof window !== 'undefined') window.GiftTimeline = timeline;
+  else if (typeof globalThis !== 'undefined') globalThis.GiftTimeline = timeline;
 })();
