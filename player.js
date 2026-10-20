@@ -4,9 +4,12 @@
   const gift = $('gift'), frame = $('scene-frame'), zone = $('scene-zone');
   const audio = $('music'), start = $('start'), sound = $('sound'), fullscreen = $('fullscreen');
   const state = {ready:false,started:false,wantsSound:true,pendingStart:false,elapsed:0,last:0,lastMessage:0,lastSent:0,lastScene:'intro',resumeAudio:false,run:0,fuelReady:false,fuelStarted:false,clockMode:'waiting',playRequest:0,audioWaitSince:0,audioProgressAt:0,lastAudioTime:0};
-  let loadTimer = 0;
+  const appleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  let loadTimer = 0, sceneLoading = false, loadFailed = false, ticking = false;
   function loadingFallback() {
-    if (state.ready) return;
+    if (state.ready || !sceneLoading) return;
+    sceneLoading = false;loadFailed = true;
     $('loading').textContent = 'Mở món quà hơi lâu. Bấm nút bên dưới để thử lại nhé ♡';
     start.disabled = false;
     start.innerHTML = 'Tải lại món quà <span aria-hidden="true">♡</span>';
@@ -14,6 +17,13 @@
   function startWatchdog() {
     clearTimeout(loadTimer);
     loadTimer = setTimeout(loadingFallback, 9000);
+  }
+  function loadScene() {
+    sceneLoading = true;loadFailed = false;
+    gift.classList.remove('entrance');start.disabled = true;
+    start.innerHTML = 'Đang mở món quà…';$('loading').textContent = 'Đang mở món quà…';
+    frame.src = `experience.html?v=20&run=${state.run}${appleMobile?'&tinyfx=safe':''}`;
+    startWatchdog();
   }
   const origin = location.origin, targetOrigin = origin === 'null' ? '*' : origin;
   function send(message) {if(state.ready)frame.contentWindow.postMessage(message,targetOrigin);}
@@ -34,24 +44,43 @@
     catch (_) {if(request!==state.playRequest)return;state.clockMode='silent';$('status').textContent='Chạm nút nhạc để bật âm thanh.';}
     audioUI();
   }
+  function primeAudio() {
+    const request=++state.playRequest;
+    audio.muted=true;
+    audio.play().then(()=>{
+      if(request!==state.playRequest||state.started)return;
+      audio.pause();audio.currentTime=0;audioUI();
+    },()=>{});
+  }
   function begin() {
-    if(!state.ready){state.pendingStart=true;return;}
+    if(!state.ready){
+      state.pendingStart=true;
+      if(!sceneLoading){
+        // Unlock audio in the tap, before the iframe's asynchronous handshake.
+        if(state.wantsSound)primeAudio();
+        loadScene();
+      }
+      return;
+    }
     state.started=true;state.pendingStart=false;state.elapsed=0;state.last=performance.now();state.lastMessage=0;state.lastSent=0;state.lastScene='intro';state.fuelReady=false;state.fuelStarted=false;
     state.clockMode=state.wantsSound?'waiting':'silent';
     state.audioWaitSince=performance.now();state.audioProgressAt=state.audioWaitSince;state.lastAudioTime=0;
     interactive(false);$('wish').textContent=timeline.scenes[0].text;
     gift.classList.add('started');audio.currentTime=0;audio.muted=!state.wantsSound;
     if(state.wantsSound)void playAudio();send({type:'gift-clock',elapsed:0});
+    if(!ticking){ticking=true;requestAnimationFrame(tick);}
   }
   function replay() {
     ++state.playRequest;audio.pause();audio.currentTime=0;state.ready=false;state.started=false;state.pendingStart=true;state.elapsed=0;
     state.fuelReady=false;state.fuelStarted=false;interactive(false);
-    gift.classList.remove('ready','started');start.disabled=true;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';startWatchdog();frame.src=`experience.html?v=19&run=${++state.run}`;audioUI();
+    gift.classList.remove('ready','started');++state.run;
+    if(state.wantsSound)primeAudio();loadScene();audioUI();
   }
   window.addEventListener('message',event=>{
     if(event.source!==frame.contentWindow||event.origin!==origin)return;
     const data=event.data;if(!data||typeof data!=='object')return;
-    if(data.type==='gift-ready'){
+    if(data.type==='gift-ready'&&data.run===state.run){
+      sceneLoading=false;loadFailed=false;
       const first=!state.ready;state.ready=true;clearTimeout(loadTimer);gift.classList.add('ready');start.disabled=false;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';fit();
       if(first&&state.pendingStart)begin();
     }
@@ -67,7 +96,7 @@
     if(data.type==='gift-letter-open')$('status').textContent='Lá thư đã mở. Bà có thể cuộn để đọc hết lời chúc.';
     if(data.type==='gift-error'){$('loading').textContent=data.message;$('status').textContent=data.message;}
   });
-  frame.addEventListener('load',()=>{frame.contentWindow.postMessage({type:'gift-hello'},targetOrigin);startWatchdog();});
+  frame.addEventListener('load',()=>{if(!sceneLoading)return;frame.contentWindow.postMessage({type:'gift-hello'},targetOrigin);startWatchdog();});
   frame.addEventListener('error',loadingFallback);
   function tick(now) {
     requestAnimationFrame(tick);const delta=state.last?Math.min((now-state.last)/1000,.2):0;state.last=now;
@@ -99,7 +128,8 @@
       const scene=timeline.sceneAt(state.elapsed);if(scene.id!==state.lastScene){state.lastScene=scene.id;$('wish').textContent=scene.text;}
     }
   }
-  start.addEventListener('click',()=>{if(!state.ready){location.reload();return;}begin();});zone.addEventListener('click',()=>{if(!state.started)begin();});$('replay').addEventListener('click',replay);
+  function requestStart(){if(loadFailed){replay();return;}begin();}
+  start.addEventListener('click',requestStart);zone.addEventListener('click',()=>{if(!state.started)requestStart();});$('replay').addEventListener('click',replay);
   sound.addEventListener('click',async()=>{
     if(!state.started){state.wantsSound=true;begin();return;}
     if(!audio.paused&&!audio.muted&&!audio.ended){state.wantsSound=false;audio.muted=true;audioUI();return;}
@@ -121,5 +151,5 @@
   });
   for(const event of ['play','pause','ended','volumechange'])audio.addEventListener(event,audioUI);
   audio.addEventListener('error',()=>{state.clockMode='silent';$('status').textContent='Không tải được nhạc; hoạt ảnh vẫn tiếp tục.';audioUI();});
-  window.addEventListener('resize',fit,{passive:true});fit();audioUI();startWatchdog();requestAnimationFrame(tick);
+  window.addEventListener('resize',fit,{passive:true});fit();audioUI();
 })();

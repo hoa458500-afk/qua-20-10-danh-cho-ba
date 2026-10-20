@@ -9,21 +9,21 @@
   <meta property="og:description" content="Một món quà nhỏ ngày 20/10. Chạm để nhận lời chúc dành cho bà.">
   <title>20/10 · Dành cho nụ cười của bà</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="player.css?v=17">
-  <script src="timeline.js?v=17" defer></script>
-  <script src="player.js?v=19" defer></script>
+  <link rel="stylesheet" href="player.css?v=20">
+  <script src="timeline.js?v=20" defer></script>
+  <script src="player.js?v=20" defer></script>
 </head>
 <body>
-<main id="gift" aria-label="Món quà 20 tháng 10">
+<main id="gift" class="entrance" aria-label="Món quà 20 tháng 10">
  <div class="scene-zone" id="scene-zone">
-  <iframe id="scene-frame" src="experience.html?v=19" title="Hoạt ảnh Tiny theo video tham chiếu" allow="autoplay; fullscreen" tabindex="-1" aria-hidden="true" referrerpolicy="no-referrer"></iframe>
-  <p class="loading" id="loading">Đang mở món quà…</p>
+  <iframe id="scene-frame" title="Hoạt ảnh Tiny theo video tham chiếu" allow="autoplay; fullscreen" tabindex="-1" aria-hidden="true" referrerpolicy="no-referrer"></iframe>
+  <p class="loading" id="loading">này bà ơi</p>
  </div>
  <p class="rotate-hint">Xoay ngang điện thoại để xem như video</p>
- <footer class="controls"><button id="replay" type="button" title="Xem lại từ đầu" aria-label="Xem lại từ đầu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="start" class="start" type="button" disabled>Chạm để bắt đầu <span aria-hidden="true">♡</span></button><button id="sound" type="button" title="Bật nhạc" aria-label="Bật nhạc" aria-pressed="false"><svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h4l5-4v14l-5-4H4ZM17 8a6 6 0 0 1 0 8M20 5a10 10 0 0 1 0 14" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h4l5-4v14l-5-4H4ZM17 9l5 6m0-6-5 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="fullscreen" type="button" title="Toàn màn hình" aria-label="Toàn màn hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></footer>
+ <footer class="controls"><button id="replay" type="button" title="Xem lại từ đầu" aria-label="Xem lại từ đầu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="start" class="start" type="button">Chạm để bắt đầu <span aria-hidden="true">♡</span></button><button id="sound" type="button" title="Bật nhạc" aria-label="Bật nhạc" aria-pressed="false"><svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h4l5-4v14l-5-4H4ZM17 8a6 6 0 0 1 0 8M20 5a10 10 0 0 1 0 14" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h4l5-4v14l-5-4H4ZM17 9l5 6m0-6-5 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="fullscreen" type="button" title="Toàn màn hình" aria-label="Toàn màn hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></footer>
  <p id="wish" class="sr-only" aria-live="polite" aria-atomic="true">này bà ơi</p>
  <span id="status" class="sr-only" role="status"></span>
 </main>
-<audio id="music" src="nhac-tu-video-1000000477.m4a" preload="auto" loop></audio>
+<audio id="music" src="nhac-tu-video-1000000477.m4a" preload="none" loop></audio>
 </body>
 </html>

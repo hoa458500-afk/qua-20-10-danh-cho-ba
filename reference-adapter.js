@@ -4,7 +4,8 @@
   'use strict';
   const origin = location.origin, targetOrigin = origin === 'null' ? '*' : origin, timeline = window.GiftTimeline;
   let currentScene = 0, initialized = false;
-  const send = message => parent.postMessage(message, targetOrigin);
+  const run = Number(new URLSearchParams(location.search).get('run')) || 0;
+  const send = message => parent.postMessage(Object.assign({run},message), targetOrigin);
   const bouquet = document.getElementById('final-bouquet');
   const smileIndex = timeline.scenes.findIndex(scene => scene.id === 'smile');
   const flightIndex = timeline.scenes.findIndex(scene => scene.id === 'flight');
@@ -34,7 +35,7 @@
     text1.classList.add('hien-thi');clickCount = 0;canClick = true;activeWish = '';
     matElements.forEach(eye => eye.classList.remove('thuc'));
     dungLiec(false);
-    window.GiftContinuation.prepareScene?.('intro');
+    if (window.GiftContinuation.prepareScene) window.GiftContinuation.prepareScene('intro');
   }
   function sync(seconds) {
     seconds = window.GiftContinuation.limitTime(seconds);
@@ -45,7 +46,7 @@
       else if (currentScene === flightIndex + 1) window.GiftContinuation.showLetter();
       currentScene++;
       if (typeof budgetSceneTransition === 'function') budgetSceneTransition(1200);
-      window.GiftContinuation.prepareScene?.(timeline.scenes[currentScene].id);
+      if (window.GiftContinuation.prepareScene) window.GiftContinuation.prepareScene(timeline.scenes[currentScene].id);
     }
     syncBouquet(seconds);
     window.GiftContinuation.sync(seconds);

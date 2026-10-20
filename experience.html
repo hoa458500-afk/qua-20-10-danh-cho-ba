@@ -5,33 +5,36 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="bouquet.css?v=17">
 <link rel="stylesheet" href="continuation.css?v=17">
-<link rel="stylesheet" href="motion.css?v=19">
+<link rel="stylesheet" href="motion.css?v=20">
 <style>@font-face{font-family:"Courier Prime";font-weight:400;font-style:normal;font-display:swap;src:url("assets/courier-prime.ttf") format("truetype")}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="compat.js?v=20"></script>
 <script id="tiny-performance-profile">
 /* Performance profile: animated background adapts, story timing/audio/product links stay unchanged. */
 window.TINY_PERF = (() => {
   const qs = new URLSearchParams(location.search);
   const quality = qs.get('tinyfx');
+  const safe = quality === 'safe';
   // The host scales a fixed 1536px iframe, so its width cannot identify a phone.
   const touch = matchMedia('(pointer:coarse)').matches;
   const appleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent)
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const mobile = appleMobile || /Android|Mobile/.test(navigator.userAgent)
-    || !!navigator.userAgentData?.mobile
+    || !!(navigator.userAgentData && navigator.userAgentData.mobile)
     || (touch && navigator.maxTouchPoints > 0 && Math.min(screen.width,screen.height) <= 1024);
   const constrained = touch || (navigator.deviceMemory && navigator.deviceMemory <= 6)
      || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
   const lite = mobile || (quality === 'full' ? false : quality === 'lite' ? true : !!constrained);
   document.documentElement.classList.toggle('tiny-lite', lite);
   document.documentElement.classList.toggle('tiny-mobile', mobile);
-  const maxCanvasPixels = mobile ? 365000 : lite ? 1250000 : 2100000;
+  document.documentElement.classList.toggle('tiny-safe', safe);
+  const maxCanvasPixels = safe ? 180000 : mobile ? 365000 : lite ? 1250000 : 2100000;
   function canvasDpr(w,h,maxDpr=1.6) {
-    return Math.max(mobile ? .48 : .55, Math.min(devicePixelRatio || 1,
-      mobile ? .84 : lite ? 1.15 : maxDpr,
-      Math.sqrt(maxCanvasPixels / Math.max(1, w*h))));
+    return Math.min(devicePixelRatio || 1,
+      safe ? .6 : mobile ? .84 : lite ? 1.15 : maxDpr,
+      Math.sqrt(maxCanvasPixels / Math.max(1, w*h)));
   }
-  return { lite, mobile, canvasDpr, ambientFps: mobile ? 30 : lite ? 24 : 60,
+  return { lite, mobile, safe, canvasDpr, ambientFps: mobile ? 30 : lite ? 24 : 60,
     roverFps:mobile ? 30 : lite ? 30 : 60,
     orbitFps:mobile ? 24 : lite ? 24 : 60,
     leafFps:mobile ? 30 : lite ? 24 : 60 };
@@ -6951,7 +6954,7 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
         function hideIntroNudge() {
             clearTimeout(introNudgeTimer);
             introNudgeTimer = null;
-            introNudge?.classList.remove('show');
+            if (introNudge) introNudge.classList.remove('show');
             khungMat.classList.remove('tiny-intro-urging');
         }
         function scheduleIntroNudge(waitMs=2000) {
@@ -6962,7 +6965,7 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
                 // Nếu người xem chưa đánh thức Tiny, Tiny tự mở mắt mời sang cảnh.
                 matElements.forEach(eye => eye.classList.add('thuc'));
                 khungMat.classList.add('tiny-intro-urging');
-                introNudge?.classList.add('show');
+                if (introNudge) introNudge.classList.add('show');
             },waitMs);
         }
         document.addEventListener('visibilitychange', () => {
@@ -7432,7 +7435,7 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
                 const startScale = mode==='heart' ? 1.12 : 1;
                 const endScale = mode==='heart' ? .12 : .2;
                 const fadeDuration = mode==='heart' ? Math.max(duration, 840) : duration;
-                const a=dot.animate([{opacity:1,transform:dot.style.transform+' scale('+startScale+')'},
+                const a=giftAnimate(dot,[{opacity:1,transform:dot.style.transform+' scale('+startScale+')'},
                     {opacity:0,transform:dot.style.transform+' scale('+endScale+')'}],
                     {duration:fadeDuration,easing:'ease-out',fill:'forwards'});
                 a.onfinish=()=>dot.remove();
@@ -7475,7 +7478,7 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
                 glow.style.width=glow.style.height=(mode==='heart'?'110px':'90px');
                 glow.style.transform='translate('+(x0-45)+'px,'+(y0-45)+'px)';
                 document.body.appendChild(glow);
-                const a=glow.animate([{opacity:.9,transform:glow.style.transform+' scale(.3)'},
+                const a=giftAnimate(glow,[{opacity:.9,transform:glow.style.transform+' scale(.3)'},
                     {opacity:0,transform:glow.style.transform+' scale(2.2)'}],
                     {duration:600,easing:'ease-out',fill:'forwards'});
                 a.onfinish=()=>glow.remove();
@@ -7586,13 +7589,13 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
                         ],opt);
                         // SVG hiện có nằm ở mắt phải: .truc-x:last-of-type, không phải
                         // :last-child (vì SVG tiny-happy-smile nằm sau khung mắt phải).
-                        const arcPath=arcRight?.querySelector('path');
+                        const arcPath=arcRight ? arcRight.querySelector('path') : null;
                         if (arcRight) {
                             arcRight.style.setProperty('display','block','important');
                             arcRight.style.setProperty('visibility','visible','important');
                             arcRight.style.setProperty('opacity','0','important');
                             if (arcPath) {
-                                arcPath.getAnimations().forEach(a=>a.cancel());
+                                if(typeof arcPath.getAnimations==='function')arcPath.getAnimations().forEach(a=>a.cancel());
                                 arcPath.style.removeProperty('opacity');
                                 arcPath.style.removeProperty('transform');
                             }
@@ -7793,7 +7796,7 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
             cloverParticleTimer = setInterval(() => {
                 if (activeWish !== 'clover' || document.hidden || !bloom || !field) return;
                 const origin = TINY_PERF.mobile
-                    ? (tinyV8CloverParticleOrigin ||= (()=>{
+                    ? (tinyV8CloverParticleOrigin = tinyV8CloverParticleOrigin || (()=>{
                           const r=bloom.getBoundingClientRect();
                           const a=field.getBoundingClientRect();
                           return {width:r.width,height:r.height,left:r.left-a.left,top:r.top-a.top};
@@ -7806,12 +7809,12 @@ html.tiny-pc-beauty-v12 #uiverse-starfield #stars3 {
                 dot.className = 'clover-particle';
                 const sz = 3 + Math.random() * 6;
                 dot.style.width = dot.style.height = sz + 'px';
-                const x = r.left - (area?.left || 0) + r.width / 2 + (Math.random() - .5) * r.width * 1.1;
-                const y = r.top - (area?.top || 0) + r.height / 2 + (Math.random() - .5) * r.height * .8;
+                const x = r.left - ((area && area.left) || 0) + r.width / 2 + (Math.random() - .5) * r.width * 1.1;
+                const y = r.top - ((area && area.top) || 0) + r.height / 2 + (Math.random() - .5) * r.height * .8;
                 dot.style.left = x + 'px';
                 dot.style.top = y + 'px';
                 field.appendChild(dot);
-                const a = dot.animate([
+                const a = giftAnimate(dot,[
                     {transform:'translate(0px,0px) scale(1)', opacity:.95},
                     {transform:'translate(' + ((Math.random() - .5)*60).toFixed(1) + 'px,-' + (70 + Math.random()*110).toFixed(1) + 'px) scale(.2)', opacity:0}
                 ], {duration:1500 + Math.random()*1400,easing:'ease-out'});
@@ -8359,8 +8362,8 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
                         cloverParticleTimer = null;
                     }
                     const oldField = document.getElementById('clover-particle-field');
-                    oldField?.querySelectorAll('.clover-particle').forEach(dot => {
-                        dot.getAnimations().forEach(a => a.cancel());
+                    if (oldField) oldField.querySelectorAll('.clover-particle').forEach(dot => {
+                        if(typeof dot.getAnimations==='function')dot.getAnimations().forEach(a => a.cancel());
                         dot.remove();
                     });
                 }, 360);
@@ -8484,7 +8487,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
                 requestAnimationFrame(() => requestAnimationFrame(() => {
                     if(activeWish !== 'question') return;
                     luckStage.classList.add('tiny-v8-fade-luck');
-                    luckFrontField?.classList.add('tiny-v8-fade-luck');
+                    if (luckFrontField) luckFrontField.classList.add('tiny-v8-fade-luck');
                 }));
             }
             luckStage.classList.add('fading-out');
@@ -8531,7 +8534,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
             if(TINY_PERF.mobile) setTimeout(()=>{
                 if(activeWish!=='question')return;
                 luckStage.classList.add('tiny-v8-retired-luck');
-                luckFrontField?.classList.add('tiny-v8-retired-luck');
+                if (luckFrontField) luckFrontField.classList.add('tiny-v8-retired-luck');
             }, 445);
             // Cho phép bấm chuyển sang cảnh máy bay NGAY, không chờ chuỗi nháy/chớp.
             // Hoạt ảnh tự kiểm tra activeWish và bị hủy khi rời cảnh này.
@@ -9076,7 +9079,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
             const ax = after.left + after.width/2, ay = after.top + after.height/2;
             const sx = Math.min(4, before.width/Math.max(after.width,1));
             const sy = Math.min(4, before.height/Math.max(after.height,1));
-            const travel = khungMat.animate([
+            const travel = giftAnimate(khungMat,[
                 {transform:`translate(${(bx-ax).toFixed(1)}px,${(by-ay).toFixed(1)}px) scale(${sx.toFixed(3)},${sy.toFixed(3)})`},
                 {transform:'translate(0px,0px) scale(1,1)'}
             ],{duration:1050,easing:'cubic-bezier(.21,.76,.22,1)',fill:'none'});
@@ -9320,7 +9323,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
              // Morph starts together with the approach (NOT after moving stops).
              const drawApproachEyes=prepareApproachingTinyEyes();
              const FLY_MS=1650;
-             const fly=khungMat.animate([
+             const fly=giftAnimate(khungMat,[
                  {transform:`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) scale(${sx.toFixed(3)},${sy.toFixed(3)})`},
                  {transform:'translate(0px,0px) scale(1,1)'}
              ],{duration:FLY_MS,easing:'cubic-bezier(.15,.76,.22,1)',fill:'none'});
@@ -9400,8 +9403,10 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
                 clearTimeout(shareTinyBlinkTimeout);
                 shareTiny.classList.remove('share-tiny-look','share-tiny-blink','share-tiny-cheer','share-tiny-thank-glow');
                 shareFlightScene.classList.add('share-thank-you');
-                shareFlightScene.querySelector('.share-heading-thanks')?.setAttribute('aria-hidden','false');
-                shareFlightScene.querySelector('.share-heading-original')?.setAttribute('aria-hidden','true');
+                const thanksHeading=shareFlightScene.querySelector('.share-heading-thanks');
+                if(thanksHeading)thanksHeading.setAttribute('aria-hidden','false');
+                const originalHeading=shareFlightScene.querySelector('.share-heading-original');
+                if(originalHeading)originalHeading.setAttribute('aria-hidden','true');
                 shareFuelButton.disabled = true;
                 shareFlightStatus.textContent = 'Đang nạp năng lượng…';
                 shareFlightDevice.classList.add('share-flight-scene-pumping');
@@ -9433,7 +9438,8 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
             !!target.closest('a, button, input, textarea, select, summary, [role="button"], [contenteditable="true"]');
         document.addEventListener('click', function(event) {
             if (tinyIsControl(event.target)) return;
-            if (document.getElementById('shop-product-modal')?.classList.contains('show')) return;
+            const modal=document.getElementById('shop-product-modal');
+            if (modal && modal.classList.contains('show')) return;
             chuyenCanh();
         });
 
@@ -9992,7 +9998,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
 
 <script id="tiny-kado-flower-init">
 (()=>{
-  if (window.TINY_PERF?.mobile) return;
+  if (window.TINY_PERF && window.TINY_PERF.mobile) return;
   const stage = document.getElementById('smile-stage');
   const frame = document.getElementById('kado-flower-frame');
   if (!stage || !frame) return;
@@ -10009,6 +10015,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
 </script>
 <script id="tiny-upgrade-particles-v2">
 (()=>{
+  if(window.TINY_PERF && window.TINY_PERF.safe)return;
   const root=document.getElementById('tiny-wish-decor');
   if(!root)return;
   const motif=(id,html)=>{const host=document.getElementById(id);if(host){const el=document.createElement('div');el.className='tiny-upgrade-motif '+({ 'decor-want':'tiny-want-upgrade','decor-health':'tiny-health-upgrade','decor-beauty':'tiny-beauty-upgrade'}[id]);el.innerHTML=html;host.appendChild(el);}};
@@ -10017,7 +10024,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
   const plusSvg='<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M36 12 H64 V36 H88 V64 H64 V88 H36 V64 H12 V36 H36 Z"/></svg>';
   motif('decor-health','<div class="tiny-heal-sigil one">'+plusSvg+'</div><div class="tiny-heal-sigil two">'+plusSvg+'</div>');
   const flower='<svg viewBox="0 0 260 300" aria-hidden="true"><g>'+Array.from({length:6},(_,i)=>'<path d="M130 151 C86 120 88 74 130 38 C172 74 174 120 130 151" transform="rotate('+(i*60)+' 130 151)" />').join('')+'<circle class="orchid-nucleus" cx="130" cy="151" r="8"/><path d="M130 160 Q110 222 148 285" opacity=".6"/></g></svg>';
-  if(!window.TINY_PERF?.mobile) motif('decor-beauty',flower.replace('<svg ','<svg class="tiny-orchid-svg motif-left" ') + flower.replace('<svg ','<svg class="tiny-orchid-svg motif-right" '));
+  if(!window.TINY_PERF || !window.TINY_PERF.mobile) motif('decor-beauty',flower.replace('<svg ','<svg class="tiny-orchid-svg motif-left" ') + flower.replace('<svg ','<svg class="tiny-orchid-svg motif-right" '));
   const canvas=document.createElement('canvas');canvas.id='tiny-upgrade-canvas';canvas.setAttribute('aria-hidden','true');root.appendChild(canvas);
   const ctx=canvas.getContext('2d',{alpha:true});if(!ctx)return;
   const scenes=['decor-want','decor-health','decor-beauty'].map(id=>document.getElementById(id));
@@ -10333,7 +10340,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
 </script>
 <script id="tiny-mobile-lifecycle">
 (()=>{
- if(!window.TINY_PERF?.mobile)return;
+ if(!window.TINY_PERF || !window.TINY_PERF.mobile)return;
  const sync=()=>document.documentElement.classList.toggle('tiny-page-hidden',document.hidden);
  document.addEventListener('visibilitychange',sync,{passive:true});sync();
 })();
@@ -10342,7 +10349,7 @@ const SPRITES = [taoSprite(1.02, 140), taoSprite(.96, 136), taoSprite(1.08, 145)
 <script id="tiny-beauty-mobile-v5-cull">
 (()=>{
  'use strict';
- if(!window.TINY_PERF?.mobile)return;
+ if(!window.TINY_PERF || !window.TINY_PERF.mobile)return;
  const decor=document.getElementById('decor-beauty');
  const stage=document.getElementById('beauty-stage');
  if(!decor||!stage)return;
@@ -10406,7 +10413,7 @@ if(window.TINY_PERF && !window.TINY_PERF.mobile){
 
 <script id="tiny-v12-desktop-beauty-scope">
 (() => {
-  if(window.TINY_PERF?.mobile)return;
+  if(window.TINY_PERF && window.TINY_PERF.mobile)return;
   const stage=document.getElementById('beauty-stage');
   if(!stage)return;
   const root=document.documentElement;
@@ -10444,8 +10451,8 @@ if(window.TINY_PERF && !window.TINY_PERF.mobile){
     </div>
   </article>
 </section>
-<script src="timeline.js?v=17"></script>
-<script src="continuation.js?v=19"></script>
-<script src="reference-adapter.js?v=18"></script>
+<script src="timeline.js?v=20"></script>
+<script src="continuation.js?v=20"></script>
+<script src="reference-adapter.js?v=20"></script>
 </body>
 </html>

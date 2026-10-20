@@ -1,4 +1,8 @@
-# Web quà 20/10 — bản tối ưu iPhone v19
+# Web quà 20/10 — bản khởi động nhẹ iPhone v20
+
+V20 chỉ tải khung cảnh và nhạc sau khi người nhận chạm bắt đầu. Màn chào trước đó là HTML/CSS nhẹ, không có canvas, video, vòng vẽ hoặc đồng hồ tải lại. iPhone nhận cấu hình an toàn: giảm canvas còn khoảng 180 nghìn pixel, bỏ filter và will-change trên các lớp lớn, không tạo canvas hạt trang trí bổ sung. Nhạc được mở khóa im lặng trong lần chạm rồi phát từ đầu khi cảnh sẵn sàng. Thông báo sẵn sàng có mã lần phát để lần tải cũ không khởi động nhầm một lần xem lại mới.
+
+Đã bỏ optional chaining, phép gán `||=` và yêu cầu `globalThis` trên trình duyệt; thêm đường lui cho `replaceChildren` và một số chuyển động nếu Web Animations không tồn tại. Toàn bộ 16 script vượt kiểm tra cú pháp ES2018. Kiểm tra mô phỏng bao gồm không tải cảnh/nhạc trước tương tác, mở khóa âm thanh, bấm lặp, bắt tay đúng nguồn, bỏ thông báo lần phát cũ, tải lại khi chậm, chờ bấm nạp năng lượng và giới hạn canvas. Chưa kiểm chứng trên iPhone thật.
 
 V19 nhận diện iPhone/iPad/Android theo thiết bị thay vì chiều rộng iframe cố định 1536px. Trên điện thoại, bật lại cấu hình nhẹ có sẵn, giới hạn canvas khoảng 365 nghìn pixel, giảm nhịp vẽ nền xuống 30 FPS và thay ba bản đồ sao box-shadow rộng 2000px bằng sao gradient. Không tạo thêm iframe hoa 3D trên điện thoại; bó hoa chính và đĩa nhạc vẫn hiển thị. Video cô gái chỉ tải khi đến cảnh nụ cười và dùng ảnh poster nếu trình duyệt không phát được WebM. Mốc nhạc, lời chúc, bố cục ngang và nút nạp năng lượng được giữ nguyên. Kiểm tra cấu hình giả lập thiết bị và cú pháp; chưa xác minh trên iPhone thật.
 
