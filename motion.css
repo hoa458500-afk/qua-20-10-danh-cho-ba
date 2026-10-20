@@ -1,0 +1,57 @@
+/* Keep the established layout; give outgoing and incoming layers one fade. */
+html.gift-smooth #beauty-stage,
+html.gift-smooth #smile-stage,
+html.gift-smooth #clover-stage,
+html.gift-smooth #luck-stage,
+html.gift-smooth #question-stage {
+  transition: opacity 1.1s cubic-bezier(.22,.61,.36,1), visibility 0s linear 1.1s !important;
+}
+html.gift-smooth #beauty-stage.hien-thi,
+html.gift-smooth #smile-stage.hien-thi,
+html.gift-smooth #clover-stage.hien-thi,
+html.gift-smooth #luck-stage.hien-thi,
+html.gift-smooth #question-stage.hien-thi { transition-delay: 0s, 0s !important; }
+html.gift-smooth #woman-scene {
+  transition: opacity 1.1s cubic-bezier(.22,.61,.36,1), transform 5s ease-out,
+    background-position 5s ease-out, background-size 5s ease-out !important;
+}
+html.gift-smooth #smile-stage .waguri-figure {
+  transition: opacity 1.1s cubic-bezier(.22,.61,.36,1), transform 1.1s cubic-bezier(.22,.61,.36,1) !important;
+}
+html.gift-smooth #share-flight-scene.share-visible:not(.reality-leaving) {
+  /* Tiny moves into this parent: fade only the scenery so its eyes stay visible. */
+  transition: visibility 0s !important;
+}
+html.gift-smooth #share-flight-scene::before {
+  transition: opacity 1.1s cubic-bezier(.22,.61,.36,1);
+}
+html.gift-smooth #share-flight-scene .share-flight-heading,
+html.gift-smooth #share-flight-scene .share-flight-device,
+html.gift-smooth #share-flight-scene .share-flight-status {
+  transition: opacity 1.05s cubic-bezier(.22,.61,.36,1) .12s,
+    transform 1.1s cubic-bezier(.22,.61,.36,1) .12s;
+}
+html.gift-smooth.tiny-lite.tiny-scene-transition #clover-stage .clover-sample-plant,
+html.gift-smooth.tiny-lite.tiny-scene-transition #clover-stage .clover-sample-glow,
+html.gift-smooth.tiny-lite.tiny-scene-transition #clover-stage .clover-sample-sway,
+html.gift-smooth.tiny-lite.tiny-scene-transition #clover-stage .clover-sample-leaf,
+html.gift-smooth.tiny-lite.tiny-scene-transition #smile-stage .waguri-aura,
+html.gift-smooth.tiny-lite.tiny-scene-transition #smile-stage .warm-halo {
+  animation-play-state: paused !important;
+}
+html.gift-smooth #gift-letter-body { transform-origin: top; }
+html.gift-smooth .share-fuel-liquid { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html.gift-smooth #beauty-stage,
+  html.gift-smooth #smile-stage,
+  html.gift-smooth #clover-stage,
+  html.gift-smooth #luck-stage,
+  html.gift-smooth #question-stage,
+  html.gift-smooth #woman-scene,
+  html.gift-smooth #smile-stage .waguri-figure,
+  html.gift-smooth #share-flight-scene::before,
+  html.gift-smooth #share-flight-scene .share-flight-heading,
+  html.gift-smooth #share-flight-scene .share-flight-device,
+  html.gift-smooth #share-flight-scene .share-flight-status,
+  html.gift-smooth #share-flight-scene.share-visible:not(.reality-leaving) { transition: none !important; }
+}

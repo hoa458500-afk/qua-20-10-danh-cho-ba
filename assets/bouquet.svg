@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 360" fill="none">
+  <defs>
+    <linearGradient id="paper" x1="53" y1="162" x2="205" y2="327" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF4DE"/><stop offset=".52" stop-color="#F3D7CE"/><stop offset="1" stop-color="#C884A1"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="213" y1="151" x2="126" y2="301" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9DCE7"/><stop offset="1" stop-color="#D695B3"/>
+    </linearGradient>
+    <radialGradient id="rose">
+      <stop stop-color="#FFE1E6"/><stop offset=".55" stop-color="#EEA3BA"/><stop offset="1" stop-color="#C66B94"/>
+    </radialGradient>
+    <radialGradient id="cream">
+      <stop stop-color="#FFFBE8"/><stop offset=".6" stop-color="#FFEACD"/><stop offset="1" stop-color="#E9BCB4"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#B2CFAC"/><stop offset="1" stop-color="#4E897A"/>
+    </linearGradient>
+    <linearGradient id="ribbon" x1="88" y1="274" x2="185" y2="316" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D384A5"/><stop offset=".52" stop-color="#F8CBD9"/><stop offset="1" stop-color="#AF5D89"/>
+    </linearGradient>
+    <g id="pink-rose">
+      <path d="M0-28C10-35 24-28 25-18C37-15 39 0 30 8C34 21 22 32 10 28C0 38-14 33-19 24C-34 24-40 9-30-2C-35-15-24-29-13-25C-9-33-2-33 0-28Z" fill="url(#rose)" stroke="#F5C5D6" stroke-width="1.2"/>
+      <path d="M-24-5C-20-22 1-25 12-12C24-10 24 9 12 16C-1 26-18 17-17 4C-20-4-10-15 0-11C12-12 17-1 10 8C3 17-11 10-8 0C-6-7 5-6 6 1C6 6 0 8-2 4" stroke="#A9577F" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M-20 15C-15 23-4 26 3 20M11-21C19-17 23-11 22-5M-12-20C-20-13-22-6-18 1" stroke="#FFE3EB" stroke-width="2.1" stroke-linecap="round"/>
+    </g>
+    <g id="ivory-rose">
+      <path d="M0-26C12-31 24-20 23-12C34-5 30 10 22 13C20 29 4 33-5 25C-18 31-29 21-26 10C-39 0-30-17-20-17C-18-29-7-32 0-26Z" fill="url(#cream)" stroke="#FFF0DB" stroke-width="1.3"/>
+      <path d="M-19-5C-16-20 1-22 12-10C25-3 16 16 4 17C-9 20-20 8-12-3C-6-13 9-10 10 0C11 10-3 12-5 4C-9-4 3-6 4 1" stroke="#C58D9D" stroke-opacity=".52" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M-20 15C-14 22-4 24 2 21M10-21C18-17 23-9 21-3" stroke="#FFFCED" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g id="baby-breath" stroke="#B1BDA0" stroke-width="1.5">
+      <path d="M0 28L-3-8M-2 4L-16-7M-1 12L13-2"/>
+      <g fill="#FFF8E7" stroke="#F4DBDB" stroke-width=".6">
+        <circle cx="-3" cy="-11" r="4"/><circle cx="-17" cy="-8" r="4.5"/><circle cx="14" cy="-4" r="4"/>
+        <circle cx="-9" cy="-1" r="3"/><circle cx="6" cy="4" r="3.5"/>
+      </g>
+    </g>
+  </defs>
+  <!-- Paper behind the flowers, with a folded translucent edge. -->
+  <path d="M27 147L110 102L142 145L194 104L252 154L163 325L119 328Z" fill="url(#fold)" stroke="#F9DEDE" stroke-width="1.5"/>
+  <path d="M38 151L67 135L140 252L214 133L243 154L163 325L120 329Z" fill="url(#paper)"/>
+  <g stroke="#648B76" stroke-width="3" stroke-linecap="round">
+    <path d="M139 278L88 96M141 278L173 86M141 278L206 141M138 272L56 145M140 278L131 74"/>
+  </g>
+  <g fill="url(#leaf)" stroke="#C4D8BC" stroke-width=".8">
+    <path d="M91 174C54 170 40 147 47 123C74 125 93 146 91 174Z"/>
+    <path d="M80 136C53 122 50 91 64 74C88 88 94 116 80 136Z"/>
+    <path d="M109 112C88 88 94 57 113 45C131 70 128 96 109 112Z"/>
+    <path d="M158 110C150 78 164 53 189 51C196 81 181 102 158 110Z"/>
+    <path d="M190 138C188 108 208 85 233 90C232 117 215 135 190 138Z"/>
+    <path d="M194 184C204 153 227 146 247 158C235 182 215 191 194 184Z"/>
+    <path d="M132 206C99 208 82 190 84 168C109 168 131 185 132 206Z"/>
+    <path d="M155 204C161 175 181 162 202 171C197 194 175 208 155 204Z"/>
+  </g>
+  <g opacity=".95">
+    <use href="#baby-breath" transform="translate(60 106) rotate(-24)"/>
+    <use href="#baby-breath" transform="translate(137 51) rotate(7)"/>
+    <use href="#baby-breath" transform="translate(218 123) rotate(28)"/>
+    <use href="#baby-breath" transform="translate(63 164) rotate(-35)"/>
+    <use href="#baby-breath" transform="translate(204 177) rotate(33)"/>
+  </g>
+  <use href="#ivory-rose" transform="translate(103 97) rotate(-17) scale(.88)"/>
+  <use href="#pink-rose" transform="translate(166 91) rotate(16) scale(.92)"/>
+  <use href="#pink-rose" transform="translate(78 137) rotate(-24) scale(.85)"/>
+  <use href="#ivory-rose" transform="translate(197 136) rotate(17) scale(.94)"/>
+  <use href="#pink-rose" transform="translate(135 132) rotate(-7) scale(1.14)"/>
+  <use href="#ivory-rose" transform="translate(111 174) rotate(-18) scale(.88)"/>
+  <use href="#pink-rose" transform="translate(167 178) rotate(23) scale(.87)"/>
+  <use href="#baby-breath" transform="translate(141 193) scale(.8)"/>
+  <!-- Open cream paper, thin gold edging and a soft pink bow. -->
+  <path d="M39 156Q60 173 74 180L140 278L121 326Z" fill="url(#paper)" stroke="#FFE9D5" stroke-width="1.5"/>
+  <path d="M241 156Q206 179 190 183L141 278L163 325Z" fill="url(#fold)" stroke="#FFE0DB" stroke-width="1.5"/>
+  <path d="M48 169L127 310M232 169L155 312" stroke="#CFA776" stroke-opacity=".6" stroke-width="1.2"/>
+  <path d="M129 285L109 338L127 330L137 344L146 289M149 286L170 341L174 326L192 330L158 283" fill="url(#ribbon)" stroke="#F5C2D4" stroke-width="1.2"/>
+  <path d="M139 280C119 257 87 261 90 279C94 300 124 296 141 284C163 258 190 257 193 273C194 294 163 296 141 284Z" fill="url(#ribbon)" stroke="#FFD5DF" stroke-width="1.5"/>
+  <path d="M132 275Q141 271 150 278L148 289Q139 294 131 286Z" fill="#E8AAC0" stroke="#FFE0E5" stroke-width="1.2"/>
+  <path d="M101 274Q117 272 131 281M151 282Q171 268 182 272" stroke="#FFF0EC" stroke-opacity=".65" stroke-linecap="round"/>
+</svg>

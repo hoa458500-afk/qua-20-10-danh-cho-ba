@@ -1,0 +1,50 @@
+/* Letter composition measured from the second half of 1000000477.mp4. */
+#gift-letter-stage{position:fixed;inset:0;z-index:100;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;color:#f8e8f3;font-family:'Courier Prime',monospace;background:radial-gradient(ellipse at 18% 34%,#153b4a40,transparent 52%),radial-gradient(ellipse at 76% 72%,#4f17543b,transparent 66%),linear-gradient(120deg,#030f1be6,#09051be0);transition:opacity 1.25s ease,visibility 1.25s}
+#gift-letter-stage.is-visible{opacity:1;visibility:visible;pointer-events:auto}
+#gift-letter-stage [hidden]{display:none!important}
+#gift-letter-stage::before{content:'';position:absolute;left:22%;top:13%;width:56%;height:42%;border:1px solid #7192bd0d;border-radius:50%;transform:rotate(-9deg);background:#18132d18;pointer-events:none}
+#gift-letter-stage h1{position:absolute;left:30%;right:7%;top:22.5%;margin:0;text-align:center;font:700 2.4vw/1.4 'Courier Prime',monospace;letter-spacing:.01em;text-shadow:0 0 14px #a8d4ff70}
+#gift-letter-stage h1 span{color:#efbbdc;text-shadow:0 0 15px #ff9ad25c}
+#gift-letter-eyes{position:absolute;left:4.7%;top:23.5%;z-index:4}
+#gift-letter-eyes #khung-mat{position:relative!important;display:flex!important;width:max-content!important;height:9vw!important;gap:1.45vw!important;transform:none;animation:none!important;opacity:1!important;visibility:visible!important;transition:none!important}
+#gift-letter-eyes #khung-mat .truc-x{position:relative!important;flex:0 0 5.1vw!important;width:5.1vw!important;height:7.8vw!important;transform:none!important;animation:none!important;opacity:1!important;visibility:visible!important;filter:drop-shadow(0 0 9px #19f1ef4d)}
+#gift-letter-eyes #khung-mat .con-mat{position:relative!important;display:block!important;width:5.1vw!important;height:5.1vw!important;border-radius:24%!important;transform:none!important;visibility:visible!important;opacity:1!important;background:radial-gradient(ellipse at 30% 24%,#7dfff0,#00eddf 64%,#00cbd4)!important;box-shadow:0 0 17px #08f4de6b,inset 0 0 8px #b6ffff7a!important;animation:letter-eye-blink 5.8s ease-in-out 2.5s infinite!important}
+#gift-letter-eyes #khung-mat .con-mat::before,#gift-letter-eyes #khung-mat .con-mat::after,#gift-letter-eyes #khung-mat svg,#gift-letter-eyes #moi-robot,#gift-letter-eyes #tiny-intro-nudge{display:none!important}
+#gift-letter-eyes #khung-mat .ma-hong{position:absolute!important;display:block!important;top:5.5vw!important;left:50%!important;transform:translateX(-50%)!important;opacity:.85!important;font:700 1.3vw/1 monospace!important;letter-spacing:.15em!important;color:#ef9fc0!important;text-shadow:0 0 7px #ffb1dd70!important;animation:none!important}
+#gift-letter-card{position:absolute;left:28.8%;top:40.3%;width:42.3%;max-height:51.8%;padding:1.5vw 1.7vw;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;box-sizing:border-box;border:1px solid #c297c56b;border-radius:1.5vw;background:linear-gradient(135deg,#1d1b36e0,#35153ee8);box-shadow:0 0 10px #ce92c42b,0 0 36px #de99ff14,inset 0 0 24px #cb8db20c;outline:none;scrollbar-width:thin;scrollbar-color:#9b80b3 #35243d55;transition:max-height 1s ease,padding .7s ease;user-select:text}
+#gift-letter-card:focus-visible{outline:2px solid #a0e5ef;outline-offset:4px}
+#gift-letter-card::-webkit-scrollbar{width:7px}#gift-letter-card::-webkit-scrollbar-thumb{background:#9b80b3;border-radius:8px}
+#gift-letter-card .letter-eyebrow{margin:0 0 .8vw;text-align:center;font:700 .72vw/1.4 'Courier Prime',monospace;letter-spacing:.16em;color:#d0abcf}
+#gift-letter-intro{margin:.3vw 0 1.3vw;text-align:center;font:400 .95vw/1.7 'Courier Prime',monospace}
+#gift-letter-card button{display:block;width:max-content;max-width:100%;margin:1.2vw auto .15vw;padding:.75vw 1.35vw;border:1px solid #e6b0ed;border-radius:999px;background:linear-gradient(110deg,#efb5e9,#d894ee);box-shadow:0 0 18px #e1a7ed30;color:#371a46;font:700 .92vw/1.2 'Courier Prime',monospace;cursor:pointer;touch-action:manipulation}
+#gift-letter-card button:hover{background:#f3cbf1}#gift-letter-card button:focus-visible{outline:2px solid #a0f3ef;outline-offset:4px}
+#gift-letter-body{font:400 1.05vw/1.9 'Courier Prime',monospace;color:#f6edf7}
+#gift-letter-body p{margin:0 0 1.1vw}
+#gift-letter-body .letter-signature{margin:1vw 0;color:#e7b4db;font-weight:700;font-size:.91vw}
+#gift-letter-florals{position:absolute;inset:0;pointer-events:none;opacity:.67}
+#gift-letter-florals .wish-floral{width:20vw!important;height:61vh!important;bottom:10vh!important}
+#gift-letter-florals .wish-floral.left{left:0!important;transform:rotate(10deg)}
+#gift-letter-florals .wish-floral.right{right:0!important;transform:rotate(-10deg)}
+#gift-letter-florals .wish-branch{stroke-dashoffset:0;animation:none!important}
+#gift-letter-florals .wish-leaf{opacity:.65;animation:none!important}
+#gift-letter-florals .wish-bloom .petals{opacity:.8;transform:scale(1);animation:none!important}
+#gift-letter-stars,#gift-letter-petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.letter-star{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:#e0d6fb;box-shadow:0 0 7px #c3d9ff80;animation:letter-twinkle var(--d) ease-in-out var(--delay) infinite alternate}
+.letter-star.is-cross{border-radius:0;clip-path:polygon(50% 0,57% 42%,100% 50%,57% 58%,50% 100%,42% 58%,0 50%,42% 42%);transform:scale(2.8);background:#e1c8ed}
+.letter-petal{position:absolute;left:var(--x);top:-8%;width:.55vw;height:1.1vw;border-radius:80% 5% 70% 20%;background:linear-gradient(130deg,#ffcee5,#cb79bb8c);box-shadow:0 0 8px #f1a0cf30;animation:letter-petal-fall var(--d) linear var(--delay) infinite}
+#gift-letter-stage:not(.is-visible) *{animation-play-state:paused!important}
+#tiny-reality-scene.reality-to-letter{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity 1.2s,visibility 1.2s!important}
+@keyframes letter-eye-blink{0%,43%,47%,100%{scale:1 1}45%{scale:1 .12}}
+@keyframes letter-twinkle{from{opacity:.16}to{opacity:.85}}
+@keyframes letter-petal-fall{0%{translate:0 0;rotate:-35deg;opacity:0}8%{opacity:.6}90%{opacity:.6}100%{translate:var(--drift) 116vh;rotate:260deg;opacity:0}}
+@media(prefers-reduced-motion:reduce){#gift-letter-stage,#gift-letter-card{transition:none}#gift-letter-stage *{animation:none!important}.letter-star{opacity:.5}.letter-petal{display:none}}
+
+/* The recipient controls this stop in the story. */
+#share-flight-scene #share-fuel-button .share-fuel-words strong{font-size:clamp(17px,1.65vw,25px);line-height:1.2;text-align:center;letter-spacing:.01em}
+#share-flight-scene.fuel-awaiting #share-fuel-button{animation:fuel-invitation 2.2s ease-in-out infinite}
+#share-flight-scene.fuel-awaiting .share-fuel-words strong{clip-path:none!important}
+@keyframes fuel-invitation{0%,100%{box-shadow:0 0 12px #9beaff25,0 14px 26px #0005}50%{box-shadow:0 0 27px #a0ecff66,0 14px 26px #0005}}
+@media(prefers-reduced-motion:reduce){#share-flight-scene.fuel-awaiting #share-fuel-button{animation:none}}
+
+/* No alternating text beside the girl and record. Keep native cleanup targets. */
+#tiny-lyric-zone{display:none!important}
