@@ -35,7 +35,8 @@
   function prepareScene(id) {
     if (id === 'intro') idleOnce('images', () => {
       if (typeof Image !== 'function') return;
-      const files=['assets/ao-dai.png','assets/health.webp','assets/waguri-poster.png','assets/bouquet.svg'];
+      const health=window.TINY_PERF?.mobile?'assets/health-mobile.webp':'assets/health.webp';
+      const files=['assets/ao-dai.png',health,'assets/waguri-poster.png','assets/bouquet.svg'];
       files.forEach((src,index) => setTimeout(() => {
         const image=new Image();image.src=src;
         if (typeof image.decode === 'function') image.decode().catch(() => {});
