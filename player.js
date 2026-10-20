@@ -46,7 +46,7 @@
   function replay() {
     ++state.playRequest;audio.pause();audio.currentTime=0;state.ready=false;state.started=false;state.pendingStart=true;state.elapsed=0;
     state.fuelReady=false;state.fuelStarted=false;interactive(false);
-    gift.classList.remove('ready','started');start.disabled=true;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';startWatchdog();frame.src=`experience.html?v=18&run=${++state.run}`;audioUI();
+    gift.classList.remove('ready','started');start.disabled=true;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';startWatchdog();frame.src=`experience.html?v=19&run=${++state.run}`;audioUI();
   }
   window.addEventListener('message',event=>{
     if(event.source!==frame.contentWindow||event.origin!==origin)return;

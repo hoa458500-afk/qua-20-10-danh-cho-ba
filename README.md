@@ -1,4 +1,6 @@
-# Web quà 20/10 — bản chuyển cảnh v17
+# Web quà 20/10 — bản tối ưu iPhone v19
+
+V19 nhận diện iPhone/iPad/Android theo thiết bị thay vì chiều rộng iframe cố định 1536px. Trên điện thoại, bật lại cấu hình nhẹ có sẵn, giới hạn canvas khoảng 365 nghìn pixel, giảm nhịp vẽ nền xuống 30 FPS và thay ba bản đồ sao box-shadow rộng 2000px bằng sao gradient. Không tạo thêm iframe hoa 3D trên điện thoại; bó hoa chính và đĩa nhạc vẫn hiển thị. Video cô gái chỉ tải khi đến cảnh nụ cười và dùng ảnh poster nếu trình duyệt không phát được WebM. Mốc nhạc, lời chúc, bố cục ngang và nút nạp năng lượng được giữ nguyên. Kiểm tra cấu hình giả lập thiết bị và cú pháp; chưa xác minh trên iPhone thật.
 
 Bản này giữ bố cục ngang 1536 × 784 của mẫu trong video. Các cảnh sử dụng trình dựng Tiny và tài nguyên tham chiếu: mắt cyan, hoa cỏ và hai cô gái áo dài, bầu sao xanh, hình bàn tay ôm trái tim, cảnh hoa và hoạt ảnh Waguri đang cười.
 
