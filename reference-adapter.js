@@ -62,6 +62,16 @@
       if (video && currentScene === smileIndex) {if (data.hidden)video.pause();else video.play().catch(() => {});}
     }
   });
-  try {prepareIntro();initialized=true;Promise.resolve(document.fonts && document.fonts.ready).then(() => send({type:'gift-ready'}));}
-  catch (error) {send({type:'gift-error',message:'Không mở được cảnh hoạt ảnh. Bà hãy tải lại trang nhé.'});console.error('Reference scene initialization failed:',error);}
+  try {
+    prepareIntro();
+    initialized = true;
+    // iOS Safari sometimes delays font loading. The scene can start with a fallback font.
+    send({type:'gift-ready'});
+    if (document.fonts && document.fonts.ready) {
+      Promise.resolve(document.fonts.ready).then(() => send({type:'gift-ready'}), () => {});
+    }
+  } catch (error) {
+    send({type:'gift-error',message:'Không mở được cảnh hoạt ảnh. Bà hãy tải lại trang nhé.'});
+    console.error('Reference scene initialization failed:',error);
+  }
 })();

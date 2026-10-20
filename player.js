@@ -3,7 +3,18 @@
   const timeline = window.GiftTimeline, $ = id => document.getElementById(id);
   const gift = $('gift'), frame = $('scene-frame'), zone = $('scene-zone');
   const audio = $('music'), start = $('start'), sound = $('sound'), fullscreen = $('fullscreen');
-  const state = {ready:false,started:false,wantsSound:true,pendingStart:false,elapsed:0,last:0,lastMessage:0,lastSent:0,lastScene:'intro',resumeAudio:false,run:0,fuelReady:false,fuelStarted:false,clockMode:'waiting',playRequest:0};
+  const state = {ready:false,started:false,wantsSound:true,pendingStart:false,elapsed:0,last:0,lastMessage:0,lastSent:0,lastScene:'intro',resumeAudio:false,run:0,fuelReady:false,fuelStarted:false,clockMode:'waiting',playRequest:0,audioWaitSince:0,audioProgressAt:0,lastAudioTime:0};
+  let loadTimer = 0;
+  function loadingFallback() {
+    if (state.ready) return;
+    $('loading').textContent = 'Mở món quà hơi lâu. Bấm nút bên dưới để thử lại nhé ♡';
+    start.disabled = false;
+    start.innerHTML = 'Tải lại món quà <span aria-hidden="true">♡</span>';
+  }
+  function startWatchdog() {
+    clearTimeout(loadTimer);
+    loadTimer = setTimeout(loadingFallback, 9000);
+  }
   const origin = location.origin, targetOrigin = origin === 'null' ? '*' : origin;
   function send(message) {if(state.ready)frame.contentWindow.postMessage(message,targetOrigin);}
   function interactive(enabled) {
@@ -19,7 +30,7 @@
     const request=++state.playRequest;
     if(state.clockMode==='silent'&&!state.fuelStarted&&state.elapsed<timeline.fuelAt)audio.currentTime=state.elapsed;
     audio.muted=false;audio.volume=1;
-    try {await audio.play();if(request!==state.playRequest)return;state.wantsSound=true;state.clockMode='audio';}
+    try {await audio.play();if(request!==state.playRequest)return;state.wantsSound=true;if(state.clockMode==='waiting')state.clockMode='audio';}
     catch (_) {if(request!==state.playRequest)return;state.clockMode='silent';$('status').textContent='Chạm nút nhạc để bật âm thanh.';}
     audioUI();
   }
@@ -27,6 +38,7 @@
     if(!state.ready){state.pendingStart=true;return;}
     state.started=true;state.pendingStart=false;state.elapsed=0;state.last=performance.now();state.lastMessage=0;state.lastSent=0;state.lastScene='intro';state.fuelReady=false;state.fuelStarted=false;
     state.clockMode=state.wantsSound?'waiting':'silent';
+    state.audioWaitSince=performance.now();state.audioProgressAt=state.audioWaitSince;state.lastAudioTime=0;
     interactive(false);$('wish').textContent=timeline.scenes[0].text;
     gift.classList.add('started');audio.currentTime=0;audio.muted=!state.wantsSound;
     if(state.wantsSound)void playAudio();send({type:'gift-clock',elapsed:0});
@@ -34,13 +46,13 @@
   function replay() {
     ++state.playRequest;audio.pause();audio.currentTime=0;state.ready=false;state.started=false;state.pendingStart=true;state.elapsed=0;
     state.fuelReady=false;state.fuelStarted=false;interactive(false);
-    gift.classList.remove('ready','started');start.disabled=true;frame.src=`experience.html?v=17&run=${++state.run}`;audioUI();
+    gift.classList.remove('ready','started');start.disabled=true;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';startWatchdog();frame.src=`experience.html?v=18&run=${++state.run}`;audioUI();
   }
   window.addEventListener('message',event=>{
     if(event.source!==frame.contentWindow||event.origin!==origin)return;
     const data=event.data;if(!data||typeof data!=='object')return;
     if(data.type==='gift-ready'){
-      const first=!state.ready;state.ready=true;gift.classList.add('ready');start.disabled=false;fit();
+      const first=!state.ready;state.ready=true;clearTimeout(loadTimer);gift.classList.add('ready');start.disabled=false;start.innerHTML='Chạm để bắt đầu <span aria-hidden="true">♡</span>';fit();
       if(first&&state.pendingStart)begin();
     }
     if(data.type==='gift-fuel-ready'&&state.started&&!state.fuelStarted){
@@ -55,7 +67,8 @@
     if(data.type==='gift-letter-open')$('status').textContent='Lá thư đã mở. Bà có thể cuộn để đọc hết lời chúc.';
     if(data.type==='gift-error'){$('loading').textContent=data.message;$('status').textContent=data.message;}
   });
-  frame.addEventListener('load',()=>frame.contentWindow.postMessage({type:'gift-hello'},targetOrigin));
+  frame.addEventListener('load',()=>{frame.contentWindow.postMessage({type:'gift-hello'},targetOrigin);startWatchdog();});
+  frame.addEventListener('error',loadingFallback);
   function tick(now) {
     requestAnimationFrame(tick);const delta=state.last?Math.min((now-state.last)/1000,.2):0;state.last=now;
     if(document.hidden||!state.started||!state.ready)return;
@@ -63,6 +76,18 @@
     // music change. Waiting and the recipient's click never seek the soundtrack.
     const limit=state.fuelStarted?timeline.duration:timeline.fuelAt;
     if(state.elapsed<limit){
+      if(state.clockMode==='waiting' && now-state.audioWaitSince>4500){
+        // On iOS a media play() promise can remain pending while buffering.
+        state.clockMode='silent';
+        $('status').textContent='Nhạc tải chậm; câu chuyện vẫn tiếp tục. Có thể bấm nút loa để bật nhạc.';
+      }
+      if(state.clockMode==='audio' && !audio.seeking && Number.isFinite(audio.currentTime)){
+        if(audio.currentTime>state.lastAudioTime+.025){state.lastAudioTime=audio.currentTime;state.audioProgressAt=now;}
+        else if(now-state.audioProgressAt>4500 && !document.hidden){
+          state.clockMode='silent';
+          $('status').textContent='Nhạc tạm ngừng; câu chuyện vẫn tiếp tục.';
+        }
+      }
       if(state.fuelStarted||state.clockMode==='silent')state.elapsed=Math.min(limit,state.elapsed+delta);
       else if(state.clockMode==='audio'&&!audio.seeking&&Number.isFinite(audio.currentTime))state.elapsed=Math.min(limit,Math.max(state.elapsed,audio.currentTime));
     }
@@ -74,7 +99,7 @@
       const scene=timeline.sceneAt(state.elapsed);if(scene.id!==state.lastScene){state.lastScene=scene.id;$('wish').textContent=scene.text;}
     }
   }
-  start.addEventListener('click',begin);zone.addEventListener('click',()=>{if(!state.started)begin();});$('replay').addEventListener('click',replay);
+  start.addEventListener('click',()=>{if(!state.ready){location.reload();return;}begin();});zone.addEventListener('click',()=>{if(!state.started)begin();});$('replay').addEventListener('click',replay);
   sound.addEventListener('click',async()=>{
     if(!state.started){state.wantsSound=true;begin();return;}
     if(!audio.paused&&!audio.muted&&!audio.ended){state.wantsSound=false;audio.muted=true;audioUI();return;}
@@ -96,5 +121,5 @@
   });
   for(const event of ['play','pause','ended','volumechange'])audio.addEventListener(event,audioUI);
   audio.addEventListener('error',()=>{state.clockMode='silent';$('status').textContent='Không tải được nhạc; hoạt ảnh vẫn tiếp tục.';audioUI();});
-  window.addEventListener('resize',fit,{passive:true});fit();audioUI();requestAnimationFrame(tick);
+  window.addEventListener('resize',fit,{passive:true});fit();audioUI();startWatchdog();requestAnimationFrame(tick);
 })();
